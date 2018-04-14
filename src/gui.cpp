@@ -9,6 +9,9 @@
 #include "gui.hpp"
 #include "config.hpp"
 
+
+#include <iostream>
+
 namespace GUI {
 
 // Screen size:
@@ -197,6 +200,11 @@ u8 get_joypad_state(int n)
         j |= (keys[KEY_DOWN[n]])   << 5;
         j |= (keys[KEY_LEFT[n]])   << 6;
         j |= (keys[KEY_RIGHT[n]])  << 7;
+
+if(n==0){
+    j |=1;
+}
+        std::cout << ((int)j) <<"\t"<<n<< std::endl;
     }
     return j;
 }
@@ -290,12 +298,12 @@ void run()
         while (SDL_PollEvent(&e))
             switch (e.type)
             {
-                case SDL_QUIT: return;
-                case SDL_KEYDOWN:
-                    if (keys[SDL_SCANCODE_ESCAPE] and Cartridge::loaded())
-                        toggle_pause();
-                    else if (pause)
-                        menu->update(keys);
+            case SDL_QUIT: return;
+            case SDL_KEYDOWN:
+                if (keys[SDL_SCANCODE_ESCAPE] and Cartridge::loaded())
+                    toggle_pause();
+                else if (pause)
+                    menu->update(keys);
             }
 
         if (not pause) CPU::run_frame();
